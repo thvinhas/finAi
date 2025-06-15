@@ -1,5 +1,6 @@
 import {
   addDocument,
+  archiveDocument,
   deleteDocument,
   getDocumentById,
   getUserDocuments,
@@ -26,4 +27,8 @@ export async function deleteCategory(id) {
 
 export async function getCategoryById(id) {
   return getDocumentById(CATEGORY_COLLECTION, id);
+}
+
+export async function archiveCategory(id) {
+  return archiveDocument(CATEGORY_COLLECTION, id, true);
 }

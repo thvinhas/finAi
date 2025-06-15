@@ -1,13 +1,15 @@
 // components/CategoryForm.jsx
 import { useEffect, useState } from "react";
 import { addCategory, updateCategory } from "../../services/categoryService";
+import { useNavigate } from "react-router-dom";
 
 const defaultData = {
   name: "",
   type: "despesa",
 };
 
-export default function CategoryForm({ initialData, onSuccess }) {
+export default function CategoryForm({ initialData = {} }) {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState(defaultData);
   const [loading, setLoading] = useState(false);
 
@@ -34,10 +36,10 @@ export default function CategoryForm({ initialData, onSuccess }) {
       } else {
         await addCategory(formData);
       }
-      onSuccess?.();
     } catch (error) {
       alert("Erro ao salvar: " + error.message);
     } finally {
+      navigate("/categoria");
       setLoading(false);
     }
   };

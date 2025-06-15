@@ -1,4 +1,5 @@
 // components/CategoryActions.jsx
+import { TableCell } from "@mui/material";
 import { deleteCategory } from "../../services/categoryService";
 
 export default function CategoryActions({ category, onUpdate, onEdit }) {
@@ -10,9 +11,9 @@ export default function CategoryActions({ category, onUpdate, onEdit }) {
   };
 
   return (
-    <div>
+    <TableCell>
       <button onClick={onEdit}>Editar</button>
       <button onClick={handleDelete}>Excluir</button>
-    </div>
+    </TableCell>
   );
 }

@@ -1,32 +1,51 @@
-import { Drawer, List, ListItem, ListItemText } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Box, Drawer } from "@mui/material";
+import Menu from "./Menu";
 
-function Sidebar({ open, toggleDrawer }) {
-  const navigate = useNavigate();
+export default function SideBar({
+  drawerWidth,
+  mobileOpen,
+  handleDrawerTransitionEnd,
+  handleDrawerClose,
+}) {
   return (
-    <Drawer open={open} onClose={toggleDrawer}>
-      <List>
-        <ListItem
-          button
-          onClick={() => {
-            navigate("/");
-            toggleDrawer();
-          }}
-        >
-          <ListItemText primary="Dashboard" />
-        </ListItem>
-        <ListItem
-          button
-          onClick={() => {
-            navigate("/categoria");
-            toggleDrawer();
-          }}
-        >
-          <ListItemText primary="Categoria" />
-        </ListItem>
-      </List>
-    </Drawer>
+    <Box
+      component="nav"
+      sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+      aria-label="mailbox folders"
+    >
+      <Drawer
+        variant="temporary"
+        open={mobileOpen}
+        onTransitionEnd={handleDrawerTransitionEnd}
+        onClose={handleDrawerClose}
+        sx={{
+          display: { xs: "block", sm: "none" },
+          "& .MuiDrawer-paper": {
+            boxSizing: "border-box",
+            width: drawerWidth,
+          },
+        }}
+        slotProps={{
+          root: {
+            keepMounted: true, // Better open performance on mobile.
+          },
+        }}
+      >
+        <Menu />
+      </Drawer>
+      <Drawer
+        variant="permanent"
+        sx={{
+          display: { xs: "none", sm: "block" },
+          "& .MuiDrawer-paper": {
+            boxSizing: "border-box",
+            width: drawerWidth,
+          },
+        }}
+        open
+      >
+        <Menu />
+      </Drawer>
+    </Box>
   );
 }
-
-export default Sidebar;

@@ -1,40 +1,78 @@
-// src/components/Layout.jsx
-import { Box, Toolbar, useMediaQuery } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
+import {
+  AppBar,
+  Box,
+  IconButton,
+  Paper,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import SideBar from "./SideBar";
 import { useState } from "react";
-import Headbar from "./Headbar";
-import Sidebar from "./Sidebar";
-import ThemeToggle from "./ThemeToggle";
 
 const drawerWidth = 240;
-
-export default function Layout({ children, mode, setMode }) {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+export default function Layout({ children }) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
 
-  const toggleTheme = () =>
-    setMode((prev) => (prev === "light" ? "dark" : "light"));
+  const handleDrawerClose = () => {
+    setIsClosing(true);
+    setMobileOpen(false);
+  };
+
+  const handleDrawerTransitionEnd = () => {
+    setIsClosing(false);
+  };
 
   const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
+    if (!isClosing) {
+      setMobileOpen(!mobileOpen);
+    }
   };
 
   return (
     <Box sx={{ display: "flex" }}>
-      <Headbar onMenuClick={handleDrawerToggle} />
-      <Sidebar
-        variant={isMobile ? "temporary" : "permanent"}
-        open={isMobile ? mobileOpen : true}
-        onClose={() => setMobileOpen(false)}
+      <AppBar
+        position="fixed"
+        sx={{
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          ml: { sm: `${drawerWidth}px` },
+        }}
+      >
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2, display: { sm: "none" } }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" noWrap component="div">
+            FinAI
+          </Typography>
+        </Toolbar>
+      </AppBar>
+
+      <SideBar
+        drawerWidth={drawerWidth}
+        mobileOpen={mobileOpen}
+        handleDrawerClose={handleDrawerClose}
+        handleDrawerTransitionEnd={handleDrawerTransitionEnd}
       />
       <Box
         component="main"
-        sx={{ flexGrow: 1, p: 3, ml: isMobile ? 0 : `${drawerWidth}px` }}
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+        }}
       >
         <Toolbar />
-        <ThemeToggle mode={mode} toggleTheme={toggleTheme} />
-        {children}
+        <Paper elevation={2} style={{ padding: 20 }}>
+          {children}
+        </Paper>
       </Box>
     </Box>
   );

@@ -1,59 +1,96 @@
 import { BrowserRouter, Routes, Route, Router } from "react-router-dom";
-import { useState } from "react";
-// import { ThemeProvider, CssBaseline } from "@mui/material";
-// import { getTheme } from "./theme/theme";
-
-// import Layout from "./components/Layout/Layout";
-import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-import Categoria from "./pages/category/List";
-import Headbar from "./components/Layout/Headbar";
-import Sidebar from "./components/Layout/Sidebar";
-import { CssBaseline } from "@mui/material";
-// import Formulario from "./pages/Formulario";
+import ProtectedRoute from "./routes/ProtectedRoute";
+import { AuthProvider } from "./contexts/AuthContext";
+import Layout from "./components/Layout/Layout";
+import CategoryListPage from "./pages/category/CategoryListPage";
 
 function App() {
-  // const [mode, setMode] = useState("light");
-  // const theme = useMemo(() => getTheme(mode), [mode]);
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const toggleDrawer = () => setDrawerOpen(!drawerOpen);
-
   return (
     <BrowserRouter>
-      <CssBaseline />
-      <Headbar toggleDrawer={toggleDrawer} />
-      <Sidebar open={drawerOpen} toggleDrawer={toggleDrawer} />
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/categoria" element={<Categoria />} />
-        {/* <Route path="/formulario" element={<Formulario />} /> */}
-      </Routes>
+      <AuthProvider>
+        <ProtectedRoute>
+          <Layout>
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/categorias" element={<CategoryListPage />} />
+            </Routes>
+          </Layout>
+        </ProtectedRoute>
+      </AuthProvider>
     </BrowserRouter>
-
-    // <ThemeProvider theme={theme}>
-    //   <CssBaseline />
-    //   <BrowserRouter>
-    //     <Headbar toggleDrawer={toggleDrawer} />
-    //     <Sidebar open={drawerOpen} toggleDrawer={toggleDrawer} />
-    //     <Routes>
-    //       <Route path="/login" element={<Login />} />
-    //       <Route
-    //         path="/*"
-    //         element={
-    //           <Layout mode={mode} setMode={setMode}>
-    //             <Routes>
-    //               <Route path="/dashboard" element={<Dashboard />} />
-    //               <Route path="/categoria" element={<Categoria />} />
-    //               {/* <Route path="/formulario" element={<Formulario />} /> */}
-    //             </Routes>
-    //           </Layout>
-    //         }
-    //       />
-    //     </Routes>
-    //   </BrowserRouter>
-    // </ThemeProvider>
   );
+  //  <Routes>
+  {
+    /* <Route path="/login" element={<SignIn />} /> */
+  }
+  {
+    /* <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Dashboard />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        {/* ROTAS PARA CATEGORIAS */
+  }
+  {
+    /* <Route
+          path="/categoria"
+          element={
+            <ProtectedRoute>
+              <CategoryListPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/categorias/nova"
+          element={
+            <ProtectedRoute>
+              <CategoryFormPage />
+            </ProtectedRoute>
+          }
+        /> */
+  }
+  {
+    /* <Route
+          path="/categorias/:id/editar"
+          element={
+            <ProtectedRoute>
+              <CategoryFormPage />
+            </ProtectedRoute>
+          }
+        /> */
+  }
+  {
+    /* ROTAS PARA CONTAS */
+  }
+  {
+    /* <Route
+          path="/conta"
+          element={
+            <ProtectedRoute>
+              <Account />
+            </ProtectedRoute> */
+  }
+}
+// />
+{
+  /* ROTAS PARA TRANSACOES */
+}
+{
+  /* <Route
+          path="/transacao"
+          element={
+            <ProtectedRoute>
+              <Transaction />
+            </ProtectedRoute>
+          }
+        />
+      </Routes> */
 }
 
 export default App;

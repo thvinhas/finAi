@@ -22,6 +22,13 @@ export function AuthProvider({ children }) {
     return () => unsubscribe();
   }, []);
 
+  const logout = () => {
+    console.log("logout");
+
+    // authService.logout();
+    setUser(null);
+  };
+
   return (
     <AuthContext.Provider value={{ user, loading }}>
       {!loading && children}

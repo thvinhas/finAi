@@ -1,5 +1,6 @@
-import DashBoardLayout from "../components/Layout/Layout";
+// import DashBoardLayout from "../components/Layout/Layout";
 
+import { Container } from "@mui/material";
 import { auth } from "../services/firebase";
 import { signOut } from "firebase/auth";
 
@@ -10,16 +11,8 @@ export default function Dashboard() {
   };
 
   return (
-    <div>
-      <h1>Dashboard</h1>
-      <p>Bem-vindo ao seu sistema financeiro!</p>
-    </div>
-    // <div>
-    //   <h1>Dashboard - finAi</h1>
-    //   <CategoryList />
-    //   <AccountList />
-    //   <TransactionList />
-    //   <button onClick={logout}>Sair</button>
-    // </div>
+    // <Container sx={{ mt: 10 }}>
+    <h1>Dashboard</h1>
+    // </Container>
   );
 }

@@ -42,6 +42,14 @@ export async function updateDocument(collectionName, id, updatedData) {
   });
 }
 
+export async function archiveDocument(collectionName, id, archiveData) {
+  const docRef = doc(db, collectionName, id);
+  await updateDoc(docRef, {
+    archiveData: true,
+    updatedAt: serverTimestamp(),
+  });
+}
+
 export async function deleteDocument(collectionName, id) {
   const docRef = doc(db, collectionName, id);
   await deleteDoc(docRef);
