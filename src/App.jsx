@@ -4,16 +4,27 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import { AuthProvider } from "./contexts/AuthContext";
 import Layout from "./components/Layout/Layout";
 import CategoryListPage from "./pages/category/CategoryListPage";
+import SignIn from "./pages/sign-in/SignIn";
+import CategoryFormPage from "./pages/category/CategoryFormPage";
 
 function App() {
   return (
     <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<SignIn />} />
+      </Routes>
       <AuthProvider>
         <ProtectedRoute>
           <Layout>
             <Routes>
               <Route path="/" element={<Dashboard />} />
+              {/* ROTAS PARA AS CATEGORIAS */}
               <Route path="/categorias" element={<CategoryListPage />} />
+              <Route path="/categorias/novo" element={<CategoryFormPage />} />
+              <Route
+                path="/categorias/:id/editar"
+                element={<CategoryFormPage />}
+              />
             </Routes>
           </Layout>
         </ProtectedRoute>

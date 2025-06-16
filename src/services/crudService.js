@@ -20,6 +20,7 @@ export async function addDocument(collectionName, data) {
     ...data,
     userId: user.uid,
     createdAt: serverTimestamp(),
+    archiveData: false,
   });
   return docRef.id;
 }
@@ -28,7 +29,8 @@ export async function getUserDocuments(collectionName) {
   const user = getCurrentUser();
   const q = query(
     collection(db, collectionName),
-    where("userId", "==", user.uid)
+    where("userId", "==", user.uid),
+    where("archiveData", "==", false)
   );
   const snapshot = await getDocs(q);
   return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));

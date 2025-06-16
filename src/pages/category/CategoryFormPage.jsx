@@ -5,7 +5,7 @@ import {
   getCategoryById,
   updateCategory,
 } from "../../services/categoryService";
-import { Container } from "@mui/material";
+import { Container, Grid, Typography } from "@mui/material";
 import CategoryForm from "../../components/category/CategoryForm";
 
 export default function CategoryFormPage() {
@@ -23,9 +23,13 @@ export default function CategoryFormPage() {
   }, [id]);
 
   return (
-    <Container>
-      <h2>{id ? "Editar Categoria" : "Nova Categoria"}</h2>
+    <>
+      <Grid container direction="row" alignItems="center">
+        <Typography variant="h5" align="center">
+          {id ? "Editar Categoria" : "Nova Categoria"}
+        </Typography>
+      </Grid>
       <CategoryForm initialData={initialData} />
-    </Container>
+    </>
   );
 }

@@ -19,6 +19,7 @@ import {
 } from "@mui/material";
 import { GridAddIcon } from "@mui/x-data-grid";
 import { Link } from "react-router-dom";
+import TableOptions from "../utils/TableOptions";
 
 export default function CategoryList() {
   const [categories, setCategories] = useState([]);
@@ -40,6 +41,7 @@ export default function CategoryList() {
     );
     if (confirm) {
       try {
+        console.log(id);
         await archiveCategory(id);
         fetchCategories();
       } catch (error) {
@@ -49,56 +51,46 @@ export default function CategoryList() {
   };
 
   return (
-    <Container>
-      <h1>Categorias</h1>
-      <Fab color="primary" aria-label="add">
-        <Link to="/categorias/nova">
-          <GridAddIcon />
-        </Link>
-      </Fab>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>id</TableCell>
-              <TableCell align="left">Categoria</TableCell>
-              <TableCell align="left">Tipo</TableCell>
-              <TableCell align="left">Acoes</TableCell>
-            </TableRow>
-          </TableHead>
+    <TableContainer component={Paper}>
+      <Table aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell align="left">Categoria</TableCell>
+            <TableCell align="left">Tipo</TableCell>
+            <TableCell align="left">Acoes</TableCell>
+          </TableRow>
+        </TableHead>
 
-          <TableBody>
-            {categories.length > 0 ? (
-              categories.map((category) => (
-                <TableRow
-                  key={category.id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    {category.id}
-                  </TableCell>
-                  <TableCell align="left">{category.name}</TableCell>
-                  <TableCell align="left">{category.type}</TableCell>
-                  <TableCell align="left">
-                    <button>
-                      <Link to={`/categorias/${category.id}/editar`}>
-                        Editar
-                      </Link>
-                    </button>
-                    <button onClick={() => handleArchive(category.id)}>
-                      arquivar
-                    </button>
-                  </TableCell>
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell>Nenhuma categoria cadastrada.</TableCell>
+        <TableBody>
+          {categories.length > 0 ? (
+            categories.map((category) => (
+              <TableRow
+                key={category.id}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell align="left">{category.name}</TableCell>
+                <TableCell align="left">{category.type}</TableCell>
+                <TableCell align="left">
+                  <TableOptions
+                    url={`/categorias/${category.id}/editar`}
+                    handleArchive={() => handleArchive(category.id)}
+                  />
+                  {/* <button>
+                    <Link to={`/categorias/${category.id}/editar`}>Editar</Link>
+                  </button>
+                  <button onClick={() => handleArchive(category.id)}>
+                    arquivar
+                  </button> */}
+                </TableCell>
               </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Container>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell>Nenhuma categoria cadastrada.</TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 }

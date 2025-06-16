@@ -2,6 +2,14 @@
 import { useEffect, useState } from "react";
 import { addCategory, updateCategory } from "../../services/categoryService";
 import { useNavigate } from "react-router-dom";
+import {
+  Button,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
 
 const defaultData = {
   name: "",
@@ -27,6 +35,8 @@ export default function CategoryForm({ initialData = {} }) {
   };
 
   const handleSubmit = async (e) => {
+    // console.log("hue");
+
     e.preventDefault();
     setLoading(true);
 
@@ -39,30 +49,53 @@ export default function CategoryForm({ initialData = {} }) {
     } catch (error) {
       alert("Erro ao salvar: " + error.message);
     } finally {
-      navigate("/categoria");
+      navigate("/categorias");
       setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        name="name"
-        placeholder="Nome"
-        value={formData.name}
-        onChange={handleChange}
-        required
-      />
-
-      <select name="type" value={formData.type} onChange={handleChange}>
-        <option value="despesa">Despesa</option>
-        <option value="receita">Receita</option>
-      </select>
-
-      <button type="submit" disabled={loading}>
-        {loading ? "Salvando..." : formData.id ? "Atualizar" : "Salvar"}
-      </button>
+    <form onSubmit={handleSubmit} autoComplete="off">
+      <Grid container spacing={2} sx={{ alignContent: "center" }}>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <TextField
+            variant="standard"
+            label="Nome"
+            fullWidth
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <InputLabel id="tipo_categoria_label">Tipo</InputLabel>
+          <Select
+            labelId="tipo_categoria_label-simple-select-label"
+            value={formData.type}
+            label="Tipo"
+            onChange={handleChange}
+            variant="standard"
+            fullWidth
+          >
+            <MenuItem value="despesa">Despesa</MenuItem>
+            <MenuItem value="receita">Receita</MenuItem>
+          </Select>
+        </Grid>
+        <Grid
+          size={{ xs: 12, md: 4 }}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: { xs: "end", md: "start" },
+          }}
+        >
+          <div></div>
+          <Button type="submit" disabled={loading} variant="contained">
+            {loading ? "Salvando..." : formData.id ? "Atualizar" : "Salvar"}
+          </Button>
+        </Grid>
+      </Grid>
     </form>
   );
 }
