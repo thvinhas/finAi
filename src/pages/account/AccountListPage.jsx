@@ -1,8 +1,8 @@
-import { Button, Container, Grid, IconButton, Typography } from "@mui/material";
-import CategoryList from "../../components/category/CategoryList";
+import { Button, Grid, Typography } from "@mui/material";
+import AccountList from "../../components/accounts/AccountList";
 import AddIcon from "@mui/icons-material/Add";
 
-export default function CategoryListPage() {
+export default function AccountListPage() {
   return (
     <>
       <Grid
@@ -13,19 +13,19 @@ export default function CategoryListPage() {
         spacing={2}
       >
         <Grid size={{ sx: 4, md: 9 }}>
-          <Typography variant="h5">Categorias</Typography>
+          <Typography variant="h5">Contas</Typography>
         </Grid>
         <Grid size={3}>
           <Button
             variant="contained"
             startIcon={<AddIcon />}
-            href="/categorias/novo"
+            href="/contas/novo"
           >
             Adicionar
           </Button>
         </Grid>
       </Grid>
-      <CategoryList />
+      <AccountList />
     </>
   );
 }

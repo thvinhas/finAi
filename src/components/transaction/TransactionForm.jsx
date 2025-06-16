@@ -7,6 +7,9 @@ import {
 import AccountSelect from "../accounts/AccountSelect";
 import CategorySelect from "../category/CategorySelect";
 import { getUserCategory } from "../../services/categoryService";
+import { useNavigate } from "react-router-dom";
+import { Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { NumericFormat } from "react-number-format";
 
 const defaultData = {
   type: "despesa",
@@ -18,8 +21,10 @@ const defaultData = {
 };
 
 export default function TransactionForm({ initialData, onSuccess }) {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState(defaultData);
   const [loading, setLoading] = useState(false);
+
   const [allCategories, setAllCategories] = useState([]);
   const [filteredCategories, setFilteredCategories] = useState([]);
 
@@ -83,52 +88,84 @@ export default function TransactionForm({ initialData, onSuccess }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <select name="type" value={formData.type} onChange={handleChange}>
-        <option value="despesa">Despesa</option>
-        <option value="receita">Receita</option>
-      </select>
-
-      <input
-        type="text"
-        name="title"
-        placeholder="Título"
-        value={formData.title}
-        onChange={handleChange}
-        required
-      />
-
-      <input
-        type="number"
-        name="amount"
-        placeholder="Valor"
-        value={formData.amount}
-        onChange={handleChange}
-        required
-      />
-
-      <input
-        type="date"
-        name="date"
-        value={formData.date}
-        onChange={handleChange}
-        required
-      />
-
-      <CategorySelect
-        categories={filteredCategories}
-        value={formData.categoryId}
-        onChange={(value) => setFormData((f) => ({ ...f, categoryId: value }))}
-      />
-
-      <AccountSelect
-        value={formData.accountId}
-        onChange={(value) => setFormData((f) => ({ ...f, accountId: value }))}
-      />
-
-      <button type="submit" disabled={loading}>
-        {loading ? "Salvando..." : formData.id ? "Atualizar" : "Salvar"}
-      </button>
+    <form onSubmit={handleSubmit} autoComplete="off">
+      <Grid container spacing={2} sx={{ alignContent: "center" }}>
+        <Grid size={{ xs: 12, md: 3 }}>
+          <InputLabel id="tipo_categoria_label">Tipo</InputLabel>
+          <Select
+            labelId="tipo_categoria_label-simple-select-label"
+            value={formData.type}
+            label="type"
+            onChange={handleChange}
+            variant="standard"
+            fullWidth
+          >
+            <MenuItem value="despesa">Despesa</MenuItem>
+            <MenuItem value="receita">Receita</MenuItem>
+          </Select>
+        </Grid>
+        <Grid size={{ xs: 12, md: 3 }}>
+          <TextField
+            variant="standard"
+            label="Título"
+            fullWidth
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
+            required
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 3 }}>
+          <NumericFormat
+            value={formData.amount}
+            onChange={handleChange}
+            customInput={TextField}
+            thousandSeparator
+            valueIsNumericString
+            prefix="€"
+            variant="standard"
+            label="Valor"
+            name="amount"
+            fullWidth
+            required
+          />
+        </Grid>
+      </Grid>
+      <Grid container spacing={2} sx={{ alignContent: "center" }}>
+        <Grid size={{ xs: 12, md: 3 }}>
+          <TextField
+            type="date"
+            name="date"
+            value={formData.date}
+            onChange={handleChange}
+            fullWidth
+            variant="standard"
+            required
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 3 }}>
+          <CategorySelect
+            categories={filteredCategories}
+            value={formData.categoryId}
+            onChange={(value) =>
+              setFormData((f) => ({ ...f, categoryId: value }))
+            }
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 3 }}>
+          <AccountSelect
+            value={formData.accountId}
+            onChange={(value) =>
+              setFormData((f) => ({ ...f, accountId: value }))
+            }
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 3 }}>
+          <button type="submit" disabled={loading} variant="contained">
+            {loading ? "Salvando..." : formData.id ? "Atualizar" : "Salvar"}
+          </button>
+        </Grid>
+      </Grid>
     </form>
   );
 }

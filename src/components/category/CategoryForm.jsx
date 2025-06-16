@@ -35,8 +35,6 @@ export default function CategoryForm({ initialData = {} }) {
   };
 
   const handleSubmit = async (e) => {
-    // console.log("hue");
-
     e.preventDefault();
     setLoading(true);
 

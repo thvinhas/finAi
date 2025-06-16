@@ -23,7 +23,6 @@ import TableOptions from "../utils/TableOptions";
 
 export default function CategoryList() {
   const [categories, setCategories] = useState([]);
-  const [editingCategory, setEditingCategory] = useState(null);
 
   // Função para buscar categorias
   const fetchCategories = async () => {
@@ -75,12 +74,6 @@ export default function CategoryList() {
                     url={`/categorias/${category.id}/editar`}
                     handleArchive={() => handleArchive(category.id)}
                   />
-                  {/* <button>
-                    <Link to={`/categorias/${category.id}/editar`}>Editar</Link>
-                  </button>
-                  <button onClick={() => handleArchive(category.id)}>
-                    arquivar
-                  </button> */}
                 </TableCell>
               </TableRow>
             ))

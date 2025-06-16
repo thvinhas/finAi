@@ -1,5 +1,6 @@
 import {
   addDocument,
+  archiveDocument,
   deleteDocument,
   getDocumentById,
   getUserDocuments,
@@ -26,4 +27,8 @@ export async function deleteAccount(id) {
 
 export async function getAccountById(id) {
   return getDocumentById(ACCOUNT_COLECTION, id);
+}
+
+export async function archiveAccount(id) {
+  return archiveDocument(ACCOUNT_COLECTION, id, true);
 }

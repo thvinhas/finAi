@@ -22,3 +22,7 @@ export async function updateTransaction(id, updatedData) {
 export async function deleteTransaction(id) {
   return deleteDocument(TRANSACTION_COLLECTION, id);
 }
+
+export async function getTransactionById(id) {
+  return getDocumentById(TRANSACTION_COLLECTION, id);
+}

@@ -6,6 +6,10 @@ import Layout from "./components/Layout/Layout";
 import CategoryListPage from "./pages/category/CategoryListPage";
 import SignIn from "./pages/sign-in/SignIn";
 import CategoryFormPage from "./pages/category/CategoryFormPage";
+import AccountListPage from "./pages/account/AccountListPage";
+import AccountFormPage from "./pages/account/AccountFormPage";
+import TransactionListPage from "./pages/transaction/TransactionListPage";
+import TransactionFormPage from "./pages/transaction/TransactionFormPage";
 
 function App() {
   return (
@@ -24,6 +28,20 @@ function App() {
               <Route
                 path="/categorias/:id/editar"
                 element={<CategoryFormPage />}
+              />
+              {/* ROTAS PARA AS CONTAS */}
+              <Route path="/contas" element={<AccountListPage />} />
+              <Route path="/contas/novo" element={<AccountFormPage />} />
+              <Route path="/contas/:id/editar" element={<AccountFormPage />} />
+              {/* ROTAS PARA AS Transacoes */}
+              <Route path="/transacoes" element={<TransactionListPage />} />
+              <Route
+                path="/transacoes/novo"
+                element={<TransactionFormPage />}
+              />
+              <Route
+                path="/transacoes/:id/editar"
+                element={<TransactionFormPage />}
               />
             </Routes>
           </Layout>
