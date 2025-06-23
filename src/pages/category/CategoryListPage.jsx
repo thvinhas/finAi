@@ -13,7 +13,9 @@ export default function CategoryListPage() {
         spacing={2}
       >
         <Grid size={{ sx: 4, md: 9 }}>
-          <Typography variant="h5">Categorias</Typography>
+          <Typography variant="h6" fontWeight="bold">
+            Categorias
+          </Typography>
         </Grid>
         <Grid size={3}>
           <Button

@@ -72,6 +72,7 @@ export default function CategoryForm({ initialData = {} }) {
             labelId="tipo_categoria_label-simple-select-label"
             value={formData.type}
             label="Tipo"
+            name="type"
             onChange={handleChange}
             variant="standard"
             fullWidth

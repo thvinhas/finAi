@@ -6,6 +6,7 @@ import { NumericFormat } from "react-number-format";
 
 const defaultData = {
   name: "",
+  balance: 0.0,
 };
 
 export default function AccountForm({ initialData = {} }) {
@@ -32,10 +33,15 @@ export default function AccountForm({ initialData = {} }) {
     setLoading(true);
 
     try {
+      const dataToSave = {
+        ...formData,
+        balance: parseFloat(formData.balance),
+      };
+
       if (formData.id) {
-        await updateAccount(formData.id, formData);
+        await updateAccount(formData.id, dataToSave);
       } else {
-        const docRef = await addAccount(formData);
+        const docRef = await addAccount(dataToSave);
         console.log("Conta criada com ID:", docRef.id);
       }
     } catch (err) {
@@ -62,15 +68,20 @@ export default function AccountForm({ initialData = {} }) {
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <NumericFormat
-            value={formData.value}
-            onChange={handleChange}
+            value={formData.balance}
+            onValueChange={(values) =>
+              setFormData((f) => ({ ...f, balance: values.floatValue || 0 }))
+            }
             customInput={TextField}
-            thousandSeparator
-            valueIsNumericString
+            thousandSeparator="."
+            decimalSeparator=","
+            decimalScale={2}
+            fixedDecimalScale
+            allowNegative={true}
             prefix="€"
             variant="standard"
-            label="Valor"
-            name="value"
+            label="Saldo"
+            name="balance"
             fullWidth
             required
           />

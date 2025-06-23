@@ -5,3 +5,8 @@ export function getCurrentUser() {
   if (!user) throw new Error("Usuário não autenticado");
   return user;
 }
+
+const logout = () => {
+  console.log("hue");
+  signOut(auth);
+};

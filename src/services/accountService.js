@@ -32,3 +32,9 @@ export async function getAccountById(id) {
 export async function archiveAccount(id) {
   return archiveDocument(ACCOUNT_COLECTION, id, true);
 }
+
+export async function updateAccountBalance(AccountId, amount) {
+  const account = await getAccountById(AccountId);
+  account.balance += amount;
+  await updateAccount(AccountId, account);
+}

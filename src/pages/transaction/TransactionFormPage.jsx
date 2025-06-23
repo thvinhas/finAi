@@ -20,7 +20,12 @@ export default function TransactionFormPage() {
 
   return (
     <>
-      <Grid container direction="row" alignItems="center">
+      <Grid
+        container
+        direction="row"
+        alignItems="center"
+        sx={{ marginBottom: 2 }}
+      >
         <Typography variant="h5" align="center">
           {id ? "Editar Transacao" : "Nova Transacao"}
         </Typography>

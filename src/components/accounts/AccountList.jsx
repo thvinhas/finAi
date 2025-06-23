@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { archiveAccount, getUserAccounts } from "../../services/accountService";
-import AccountItem from "./AccountItem";
-import AccountForm from "./AccountForm";
 import {
   Paper,
   Table,
@@ -12,6 +10,7 @@ import {
   TableRow,
 } from "@mui/material";
 import TableOptions from "../utils/TableOptions";
+import { formatCurrency } from "../../utils/formatters";
 
 export default function AccountList() {
   const [accounts, setAccounts] = useState([]);
@@ -41,6 +40,11 @@ export default function AccountList() {
     }
   };
 
+  const getAmountStyle = (value) => ({
+    color: value >= 0 ? "green" : "red",
+    fontWeight: "bold",
+  });
+
   return (
     <TableContainer component={Paper}>
       <Table aria-label="simple table">
@@ -59,7 +63,9 @@ export default function AccountList() {
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell align="left">{account.name}</TableCell>
-                <TableCell align="left">{account.value}</TableCell>
+                <TableCell align="left" style={getAmountStyle(account.balance)}>
+                  {formatCurrency(account.balance)}
+                </TableCell>
                 <TableCell align="left">
                   <TableOptions
                     url={`/contas/${account.id}/editar`}

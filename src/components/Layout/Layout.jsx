@@ -70,9 +70,8 @@ export default function Layout({ children }) {
         }}
       >
         <Toolbar />
-        <Paper elevation={2} style={{ padding: 20 }}>
-          {children}
-        </Paper>
+
+        {children}
       </Box>
     </Box>
   );

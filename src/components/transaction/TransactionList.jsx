@@ -1,8 +1,10 @@
 // components/TransactionList.jsx
 import { useEffect, useState } from "react";
-import { getUserTransactions } from "../../services/transactionService";
-import TransactionItem from "./TransactionItem";
-import TransactionForm from "./TransactionForm";
+import {
+  deleteTransaction,
+  getUserTransactions,
+} from "../../services/transactionService";
+
 import {
   Paper,
   Table,
@@ -15,6 +17,7 @@ import {
 import TableOptions from "../utils/TableOptions";
 import { getUserAccounts } from "../../services/accountService";
 import { getUserCategory } from "../../services/categoryService";
+import { formatCurrency, formatFirestoreDate } from "../../utils/formatters";
 
 export default function TransactionList() {
   const [transactions, setTransactions] = useState([]);
@@ -25,7 +28,6 @@ export default function TransactionList() {
   const fetchTransactions = async () => {
     const data = await getUserTransactions();
     setTransactions(data);
-    setEditingTransaction(null);
   };
 
   useEffect(() => {
@@ -45,6 +47,12 @@ export default function TransactionList() {
     fetchData();
   }, []);
 
+  const handleDelete = async (id) => {
+    if (window.confirm("Deseja realmente excluir?")) {
+      await deleteTransaction(id);
+      await fetchTransactions(); // recarrega só a tabela
+    }
+  };
   const getAccountName = (id) =>
     accounts.find((acc) => acc.id === id)?.name || "Conta";
 
@@ -55,7 +63,6 @@ export default function TransactionList() {
     color: type === "receita" ? "green" : "red",
     fontWeight: "bold",
   });
-  const formatDate = (dateStr) => new Date(dateStr).toLocaleDateString("pt-BR");
 
   return (
     <TableContainer component={Paper}>
@@ -78,7 +85,7 @@ export default function TransactionList() {
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell align="left">
-                  {formatDate(transaction.date)}
+                  {formatFirestoreDate(transaction.transactionDate)}
                 </TableCell>
                 <TableCell align="left">{transaction.title}</TableCell>
                 <TableCell align="left">
@@ -91,12 +98,12 @@ export default function TransactionList() {
                   align="left"
                   style={getAmountStyle(transaction.type)}
                 >
-                  {transaction.amount}
+                  {formatCurrency(transaction.amount)}
                 </TableCell>
                 <TableCell align="left">
                   <TableOptions
-                    url={`/contas/${transaction.id}/editar`}
-                    handleArchive={() => handleArchive(transaction.id)}
+                    url={`/transacoes/${transaction.id}/editar`}
+                    handleArchive={() => handleDelete(transaction.id)}
                   />
                 </TableCell>
               </TableRow>

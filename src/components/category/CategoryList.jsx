@@ -4,8 +4,6 @@ import {
   archiveCategory,
   getUserCategory,
 } from "../../services/categoryService";
-import CategoryForm from "./CategoryForm";
-import CategoryItem from "./CategoryItem";
 import {
   Container,
   Fab,

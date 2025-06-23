@@ -8,14 +8,24 @@ import AccountSelect from "../accounts/AccountSelect";
 import CategorySelect from "../category/CategorySelect";
 import { getUserCategory } from "../../services/categoryService";
 import { useNavigate } from "react-router-dom";
-import { Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
 import { NumericFormat } from "react-number-format";
+import { serverTimestamp, Timestamp } from "firebase/firestore";
+import { formatFirestoreDate, formatToInputDate } from "../../utils/formatters";
 
 const defaultData = {
   type: "despesa",
   title: "",
-  amount: "",
-  date: new Date().toISOString().slice(0, 10),
+  amount: "00.00",
+  transactionDate: Timestamp.fromDate(new Date()),
   categoryId: "",
   accountId: "",
 };
@@ -30,9 +40,14 @@ export default function TransactionForm({ initialData, onSuccess }) {
 
   useEffect(() => {
     if (initialData) {
+      // console.log(hu);
+
       setFormData({
         ...initialData,
-        date: initialData.date?.slice(0, 10),
+        transactionDate: initialData.transactionDate
+          .toDate()
+          .toISOString()
+          .slice(0, 10),
       });
     } else {
       setFormData(defaultData);
@@ -71,6 +86,7 @@ export default function TransactionForm({ initialData, onSuccess }) {
       const dataToSave = {
         ...formData,
         amount: parseFloat(formData.amount),
+        transactionDate: Timestamp.fromDate(new Date(formData.transactionDate)),
       };
 
       if (formData.id) {
@@ -78,70 +94,85 @@ export default function TransactionForm({ initialData, onSuccess }) {
       } else {
         await addTransaction(dataToSave);
       }
-
-      onSuccess?.();
     } catch (err) {
       alert("Erro ao salvar: " + err.message);
+    } finally {
+      navigate("/transacoes");
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
     <form onSubmit={handleSubmit} autoComplete="off">
       <Grid container spacing={2} sx={{ alignContent: "center" }}>
-        <Grid size={{ xs: 12, md: 3 }}>
-          <InputLabel id="tipo_categoria_label">Tipo</InputLabel>
-          <Select
-            labelId="tipo_categoria_label-simple-select-label"
-            value={formData.type}
-            label="type"
-            onChange={handleChange}
-            variant="standard"
-            fullWidth
-          >
-            <MenuItem value="despesa">Despesa</MenuItem>
-            <MenuItem value="receita">Receita</MenuItem>
-          </Select>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <FormControl fullWidth>
+            <InputLabel id="tipo_tipo_label">Tipo</InputLabel>
+            <Select
+              labelId="tipo_tipo_label"
+              value={formData.type}
+              label="type"
+              name="type"
+              onChange={handleChange}
+              variant="standard"
+            >
+              <MenuItem value="despesa">Despesa</MenuItem>
+              <MenuItem value="receita">Receita</MenuItem>
+            </Select>
+          </FormControl>
         </Grid>
-        <Grid size={{ xs: 12, md: 3 }}>
-          <TextField
-            variant="standard"
-            label="Título"
-            fullWidth
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            required
-          />
+        <Grid size={{ xs: 12, md: 4 }}>
+          <FormControl fullWidth>
+            <TextField
+              variant="standard"
+              label="Título"
+              fullWidth
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              required
+            />
+          </FormControl>
         </Grid>
-        <Grid size={{ xs: 12, md: 3 }}>
-          <NumericFormat
-            value={formData.amount}
-            onChange={handleChange}
-            customInput={TextField}
-            thousandSeparator
-            valueIsNumericString
-            prefix="€"
-            variant="standard"
-            label="Valor"
-            name="amount"
-            fullWidth
-            required
-          />
+        <Grid size={{ xs: 12, md: 4 }}>
+          <FormControl fullWidth>
+            <NumericFormat
+              value={formData.amount}
+              onValueChange={(values) =>
+                setFormData((f) => ({ ...f, amount: values.floatValue || 0 }))
+              }
+              customInput={TextField}
+              thousandSeparator="."
+              decimalSeparator=","
+              decimalScale={2}
+              fixedDecimalScale
+              allowNegative={true}
+              prefix="€ "
+              label="Valor"
+              name="amount"
+              fullWidth
+              required
+              variant="standard"
+            />
+          </FormControl>
         </Grid>
       </Grid>
-      <Grid container spacing={2} sx={{ alignContent: "center" }}>
+      <Grid
+        container
+        spacing={2}
+        sx={{ alignContent: "center", marginTop: { md: 2 } }}
+      >
         <Grid size={{ xs: 12, md: 3 }}>
-          <TextField
-            type="date"
-            name="date"
-            value={formData.date}
-            onChange={handleChange}
-            fullWidth
-            variant="standard"
-            required
-          />
+          <FormControl fullWidth>
+            <TextField
+              type="date"
+              name="transactionDate"
+              value={formData.transactionDate}
+              onChange={handleChange}
+              variant="standard"
+              required
+            />
+          </FormControl>
         </Grid>
         <Grid size={{ xs: 12, md: 3 }}>
           <CategorySelect
@@ -161,9 +192,11 @@ export default function TransactionForm({ initialData, onSuccess }) {
           />
         </Grid>
         <Grid size={{ xs: 12, md: 3 }}>
-          <button type="submit" disabled={loading} variant="contained">
-            {loading ? "Salvando..." : formData.id ? "Atualizar" : "Salvar"}
-          </button>
+          <FormControl fullWidth>
+            <Button type="submit" disabled={loading} variant="contained">
+              {loading ? "Salvando..." : formData.id ? "Atualizar" : "Salvar"}
+            </Button>
+          </FormControl>
         </Grid>
       </Grid>
     </form>

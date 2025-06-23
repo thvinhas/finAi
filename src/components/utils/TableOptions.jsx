@@ -10,6 +10,8 @@ import ArchiveIcon from "@mui/icons-material/Archive";
 
 const ITEM_HEIGHT = 48;
 
+// TODO ADICIONAR A OPCAO APAGAR
+
 export default function TableOptions({ url, handleArchive }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
